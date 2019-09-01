@@ -1,17 +1,26 @@
 const http = require('http')
+const fs = require('fs')
 
+/** 
+ * web服务器
+ * 1.返回文件
+ * 2.数据交互
+ * 3.数据库
+ * 
+*/
+// 返回文件
 let server = http.createServer((req, res) => {
-    let arr = []
-
-    req.on('data', data => {
-        console.log(data)
-        arr.push(data)
-    })
-    req.on('end', () => {
-        let data = Buffer.concat(arr)
-
+    fs.readFile(`www/${req.url}`, (err, data) => {
+        if(err) {
+            res.writeHeader(404)
+            res.write('404')
+        }else{
+            res.write(data)
+        }
         res.end()
     })
+
+  
 
 
 })
