@@ -19,7 +19,7 @@ let xhr = new XMLHttpRequest()
 //xhr.open('get','http://localhost:8080?')
 // 前台校验： 用户体验 后台必须校验安全性
 $(function() {
-    $('btn1').click(function() {
+    $('#btn1').click(function() {
         $.ajax({
             type: 'get',
             url: '/reg',
@@ -39,6 +39,27 @@ $(function() {
             }
         }) 
     })
+
+    $('#btn2').click(function() {
+        $.ajax({
+            type: 'get',
+            url: '/login',
+            data: {
+                user: $('#user').val(),
+                pass: $('#pass').val()
+            },
+            dataType: 'json',
+            // 通讯成功
+            success: (data) => {
+                if(data.err) {
+                    console.log('错了'+data.err)
+                }
+            },
+            error: () => {
+
+            }
+        }) 
+    }) 
 })
 
 
