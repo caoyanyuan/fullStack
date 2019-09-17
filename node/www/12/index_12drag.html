@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>拖拽上传</title>
+    <style>
+        .box{
+            width:300px;height:300px;background:#ccc;
+            text-align:center;line-height:300px;border:1px solid #ddd;
+        }
+    </style>
+    <script>
+        window.onload = function() {
+
+            document.addEventListener('drop', function (e) {
+                e.preventDefault()
+            }, false)
+            document.addEventListener('dragover', function (e) {
+                e.preventDefault()
+            }, false)
+
+            let oBox = document.querySelector('.box')
+
+            oBox.ondragenter = function(ev) {
+                oBox.innerHTML = '松手上传'
+
+                // do something example upload
+
+
+                let data = new FormData()
+
+                console.log(ev.dataTransfer.files)
+                return
+                //ev.dataTransfer.files 一直是空数组， 不知为何
+
+                data.append('file', ev.dataTransfer.files )
+
+                let oAjax = new XMLHttpRequest()
+
+                //POST
+                oAjax.open('POST', 'http://localhost:8080/api', true)
+                oAjax.send(data);
+
+                oAjax.onreadstatechange = function() {
+                    if(oAjax.readyState == 4) {
+                        let status = oAjax.status
+                        if(status >=200 && status < 300 || status == 304) {
+                            alert('成功')
+                        }else{
+                            alert('失败')
+                        }
+                    }
+                }
+            }
+            oBox.ondragleave = function() {
+                oBox.innerHTML = '请拖到这里'
+            }
+            oBox.ondragover = function(ev) {  //只要鼠标没松手，就会一直执行
+
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="box">
+        请拖到这里
+    </div>
+</body>
+</html>
