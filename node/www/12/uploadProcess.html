@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>ajax2.0 fordata对象</title>
+
+</head>
+<body>
+    <input id="user" placeholder="用户名">
+    <input id="pass" placeholder="密码">
+    <input id="file" type="file">
+    <button id="btn">提交</button>
+
+    <script>
+            let oUser = document.getElementById('user'),
+                oPass = document.getElementById('pass'),
+                oBtn = document.getElementById('btn'),
+                oFile = document.getElementById('file');
+
+            oBtn.onclick = function() {
+                let data = new FormData()
+
+                data.set('user', oUser.value);
+                data.set('pass', oPass.value);
+
+                Array.from(oFile.files).forEach(file => {
+                    data.append('file', file )
+                })
+
+                let oAjax = new XMLHttpRequest()
+
+
+                oAjax.upload.onprogress = (ev) => {
+                    console.log(ev.loaded/ev.total)
+                }
+
+                //POST
+                oAjax.open('POST', 'http://localhost:8080/api', true)
+                oAjax.send(data);
+
+                oAjax.onreadstatechange = function() {
+                    if(oAjax.readyState == 4) {
+                        let status = oAjax.status
+                        if(status >=200 && status < 300 || status == 304) {
+                            alert('成功')
+                        }else{
+                            alert('失败')
+                        }
+                    }
+                }
+
+
+            }
+
+        </script>
+</body>
+</html>

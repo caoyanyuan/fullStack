@@ -14,9 +14,6 @@ server.use(multerObj.any())
 //处理请求
 server.post('/api', (req, res) => {
     res.send('ok');
-
-    console.log(req.body)
-    console.log(req.files)
 } )
 
 server.use(express.static('../www'))  //解析静态文件
