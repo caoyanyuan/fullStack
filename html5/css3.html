@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <style>
+        .containerBox{width:200px;height:200px;position: absolute;top:50%;right:50%;margin-left:200px;margin-top:-100px;perspective: 600px;perspective-origin: top;}
+        .box{width:100%;height:100%;transform-style: preserve-3d;animation: Rotate 5s infinite alternate;}
+        .box>figure{position:absolute;border-radius: 20px/30px;overflow: hidden;}
+        .pic1{transform:rotateX(0deg) translateZ(100px);}
+        .pic2{transform:rotateY(90deg) translateZ(100px);}
+        .pic3{transform:rotateY(-90deg) translateZ(100px);}
+        .pic4{transform:rotateY(180deg) translateZ(100px);}
+        .pic5{transform:rotateX(90deg) translateZ(100px);}
+        .pic6{transform:rotateX(-90deg) translateZ(100px);}
+        @keyframes Rotate{
+            from{transform: rotateX(0deg) rotateY(0deg);}to{transform: rotateX(360deg)     rotateY(360deg);}
+        }
+  </style>
+  <section class="containerBox">
+      <div class="box">
+        <figure class="pic1"><img width="200px" height="200px" src="http://img.hb.aicdn.com/42874341c1036dd59c89dcff510ae5c189b5212620f66-3yFH15_fw658" alt="this is the 3d box picture"></figure>
+          <figure class="pic2"><img width="200px" height="200px" src="http://img.hb.aicdn.com/010d0fb807fe78ab2fac43119b47fb8ef0188673a084f-zdabhv_fw658" alt="this is the 3d box picture"></figure>
+          <figure class="pic3"><img width="200px" height="200px" src="http://img.hb.aicdn.com/b7989683adb98ed83c8332f9ea2bf7ac4b7086f394ef-5XdGQL_fw658" alt="this is the 3d box picture"></figure>
+          <figure class="pic4"><img width="200px" height="200px" src="http://img.hb.aicdn.com/f600e0e8621fc2745474d20a800f9c1c365333f216f2a-0U4557_fw658" alt="this is the 3d box picture"></figure>
+          <figure class="pic5"><img width="200px" height="200px" src="http://img.hb.aicdn.com/c07b81d1a2cb4fa062e4f0ab2e5b820748e18115fcab-tvlISc_fw658" alt="this is the 3d box picture"></figure>
+          <figure class="pic6"><img width="200px" height="200px" src="http://img.hb.aicdn.com/b4e03c1f7f5a77cf0bdb0b0492cd187d76fd0d4f18d36-YLOSJx_fw658" alt="this is the 3d box picture"></figure>
+      </div>
+  </section>
+</body>
+</html>
