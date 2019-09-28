@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+
+<style>
+.box{ width: 600px;height: 400px;margin:100px auto 0; position: relative;transform-style: preserve-3d; transform: perspective(700px) rotateX(20deg)
+}
+.box .page{
+    width: 298px;height:398px; background:white;border:1px solid black;position: absolute;top:0;
+}
+.page1{left:0}
+.page4{right:0}
+.box .child{width: 300px;height: 400px;position:absolute;left:50%;top:0;transform-style: preserve-3d;transform-origin: left;}
+
+.page2{transform:translateZ(1px)}
+.page3{transform:translateZ(-1px) scaleX(-1)}
+
+.box .child{transition:1s all ease;transform:rotateY(0deg)}
+.box:hover .child{transform:rotateY(-180deg)}
+</style>
+</head>
+<body>
+    <div class="box">
+        <div class="page page1">
+            123344
+        </div>
+        <div class="child">
+            <div class="page page2">
+                    2
+            </div>
+            <div class="page page3">
+                    3
+            </div>
+        </div>
+        
+        <div class="page page4">
+                123344
+        </div>
+    </div>
+</body>
+</html>
