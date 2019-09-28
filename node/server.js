@@ -10,7 +10,7 @@ const fs = require('fs')
 */
 // 返回文件
 let server = http.createServer((req, res) => {
-    fs.readFile(`www/${req.url}`, (err, data) => {
+    fs.readFile(`../html5/${req.url}`, (err, data) => {
         if(err) {
             res.writeHeader(404)
             res.write('404')
