@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>slider Banner 效果</title>
+</head>
+<style>
+    *{margin:0;padding:0;}
+    .box{
+        width: 100%;overflow: hidden;
+    }
+    ul{height:200px;width:10000em;}
+    li{height:100%;float:left;width:100vw;}
+</style>
+<script>
+    window.onload = () => {
+        let oBox = document.getElementById('box')
+        let oBanner= document.getElementById('banner')
+        let x=0,y=0
+
+        oBanner.addEventListener('touchstart', (ev) => {
+            let startX = ev.targetTouches[0].clientX,
+                startY = ev.targetTouches[0].clientY,
+
+                disX = startX-x,
+                disY = startY-y,
+                dir = "",
+
+                width = oBanner.children[0].offsetWidth
+
+            function fnMove(ev) {
+                
+                if(dir == "") {
+                    if(Math.abs(ev.targetTouches[0].clientX - startX) >= 5) {
+                        dir = "x"
+                    }else if(Math.abs(ev.targetTouches[0].clientY - startY) >= 5){
+                        dir = "y"
+                    }
+                }else{
+                    if(dir == "x") {
+                        x = ev.targetTouches[0].clientX-disX
+                    }else if(dir == "y") {
+                        y = ev.targetTouches[0].clientY-disY
+                    }
+                }
+               
+                oBanner.style.transform=`translate(${x}px, ${y}px)`
+            }
+
+            function fnEnd() {
+                oBanner.removeEventListener('touchmove',fnMove,false)
+                oBanner.removeEventListener('touchend',fnEnd, false)
+
+                let n = Math.round(-x/width)
+                if(n>=0){
+                    x= -n*width
+                    oBanner.style.transform=`translate(${x}px, ${y}px)`
+                }
+            }
+
+           
+
+            oBanner.addEventListener('touchmove', fnMove)
+            oBanner.addEventListener('touchend', fnEnd)
+        }, false)
+    }
+</script>
+<body>
+    <div class="box" id="box"> 
+        <ul id="banner">
+            <li>1</li>
+            <li>2</li>
+            <li>3</li>
+            <li>4</li>
+        </ul>
+    </div>
+
+   
+</body>
+</html>
