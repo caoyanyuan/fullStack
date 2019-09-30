@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>svg进度条</title>
+</head>
+<script>
+window.onload = () => {
+    let oSvg = document.getElementById('svg1')
+    let cx = 400, cy=300, r = 200, speed = 10
+    let arr = []
+
+
+    function d2a(ang) {
+        return ang/180*Math.PI
+    }
+
+    function getPoint(ang) {
+        return {
+            x: cx + Math.sin(d2a(ang)) * r,
+            y: cy + Math.cos(d2a(ang)) * r,
+        }
+    }
+
+    let end = 360
+    let a = 2
+    let now = 100
+
+    requestAnimationFrame(next)
+
+    function next() {
+        //console.log(now)
+        if(now < end) {
+            now = now + a*a*a
+            let ang = now + a*a*a
+            pie(now, ang)
+            requestAnimationFrame(next)
+        }
+    }
+
+    function pie(ang1, ang2, color) {
+
+        let oP = document.createElementNS('http://www.w3.org/2000/svg', 'path')
+
+        oP.style.stroke = 'red'
+        oP.style.fill = 'none'
+
+        function drawPath() {
+            let arr = []
+
+            let {x: x1, y: y1} = getPoint(ang1)
+
+            let {x: x2, y: y2} = getPoint(ang2)
+
+            arr.push(`M ${x1} ${y1}`)
+            //弧线
+            arr.push(`A ${r} ${r} 0 ${Math.abs(ang2-ang1)>180?1:0} 0 ${x2} ${y2}`)
+
+            //第二条线
+            //arr.push(`M ${x2} ${y2} ${cx} ${cy}`)
+
+            oP.setAttribute('d', arr.join(' '))
+            oSvg.appendChild(oP)
+
+        }
+
+        drawPath()
+
+
+
+    }
+}
+</script>
+<body>
+    <svg id="svg1" height=600 width=800></svg>
+</body>
+</html>
