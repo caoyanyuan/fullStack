@@ -5,12 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>用JS创建元素</title>
-
-    <style>
-        path{
-
-        }
-    </style>
 </head>
 <script>
 window.onload = () => {
@@ -22,12 +16,7 @@ window.onload = () => {
     function d2a(ang) {
         return ang/180*Math.PI
     }
-    function getPoint(ang) {
-        return {
-            x: cx + Math.sin(d2a(ang)) * r,
-            y: cy + Math.cos(d2a(ang)) * r,
-        }
-    }
+
 
     let data = [800, 200, 400, 500, 1000, 400],
         sum = 0
@@ -43,37 +32,62 @@ window.onload = () => {
         //16777216 16进制的字节数
         let color = Math.floor(Math.random()*16777216).toString(16)
         while(color.length<6) color="0"+color
-        
+
         pie(ang1, ang2, color)
     })
 
     function pie(ang1, ang2, color) {
+
         let oP = document.createElementNS('http://www.w3.org/2000/svg', 'path')
 
-        
         oP.style.stroke = 'red'
         oP.style.fill = color
 
-        let arr = []
+        function drawPath(r) {
+            let arr = []
 
-        let {x: x1, y: y1} = getPoint(ang1)
-        //第一条线
-        arr.push(`M ${cx} ${cy} ${x1} ${y1}`)
+            let {x: x1, y: y1} = getPoint(ang1)
+            //第一条线
+            arr.push(`M ${cx} ${cy} ${x1} ${y1}`)
 
-        let {x: x2, y: y2} = getPoint(ang2)
-        //弧线
-        arr.push(`A ${r} ${r} 0 ${Math.abs(ang2-ang1)>180?1:0} 0 ${x2} ${y2}`)
-        
-        //第二条线
-        arr.push(`M ${x2} ${y2} ${cx} ${cy}`)
+            let {x: x2, y: y2} = getPoint(ang2)
+            //弧线
+            arr.push(`A ${r} ${r} 0 ${Math.abs(ang2-ang1)>180?1:0} 0 ${x2} ${y2}`)
 
-        oP.setAttribute('d', arr.join(' '))
-        oSvg.appendChild(oP)
+            //第二条线
+            arr.push(`M ${x2} ${y2} ${cx} ${cy}`)
 
-      
+            oP.setAttribute('d', arr.join(' '))
+            oSvg.appendChild(oP)
 
-        
-        
+            function getPoint(ang) {
+                return {
+                    x: cx + Math.sin(d2a(ang)) * r,
+                    y: cy + Math.cos(d2a(ang)) * r,
+                }
+            }
+        }
+
+        drawPath(r)
+
+        let a = 0.2
+        let end = 1.2
+
+        oP.onmouseover = () => {
+            let ratio = 1
+            requestAnimationFrame(next)
+            function next() {
+                if(ratio<end) {
+                    ratio=ratio+(a*a*a)
+                    drawPath(r*ratio)
+                    requestAnimationFrame(next)
+                }
+            }
+        }
+
+        oP.onmouseout = () => {
+            drawPath(r*1)
+        }
 
 
     }
