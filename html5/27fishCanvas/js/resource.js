@@ -19,10 +19,10 @@ function loadResource(url) {
                     oImg.onload = function() {
                         cur++
     
-                        res.push({
+                        res[key] = {
                             img: this,
                             frame: json[key].frame
-                        })
+                        }
     
                         if(total == cur) {
                             resolve(res)
@@ -57,7 +57,7 @@ async function loadAllResource(){
         imgs[name]=await loadResource(src[name]);
       }
   
-      window._g_resouce=imgs;
+      window.__g_resouce=imgs;
     }catch(e){
       throw e;
     }

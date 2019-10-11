@@ -11,13 +11,42 @@
     </style>
     <script src="js/jquery.js" charset="utf-8"></script>
     <script src="js/resource.js" charset="utf-8"></script>
+    <script src="js/Spirit.js" charset="utf-8"></script>
     <script>
         window.onload = async function() {
             let oC = $('#canvas')[0]
             let gd = oC.getContext('2d')
 
             await loadAllResource()
-            
+
+            console.log(__g_resouce)
+            //底座
+            let data_bar=__g_resouce['bottom'].bottom_bar
+            let bottom_bar=new Spirit({
+                img:      data_bar.img,
+                w:        data_bar.frame.w,
+                h:        data_bar.frame.h,
+                sx:       data_bar.frame.x,
+                sy:       data_bar.frame.y,
+                x:        400,
+                y:        566
+            });
+
+
+            requestAnimationFrame(next);
+            function next(){
+                //1.清除
+                gd.clearRect(0,0,oC.width,oC.height);
+
+               
+
+                //3.绘制
+                bottom_bar.draw(gd);
+                
+
+                requestAnimationFrame(next);
+            }
+
         }
     </script>
 </head>
