@@ -17,6 +17,8 @@ class Spirit{
     }
 
     draw(gd){
+        // save 保存canvs的设置 restore释放save保存的设置
+        // 不加的话 canvas的设置会乱七八糟
         gd.save();
     
         gd.translate(this.x, this.y);
