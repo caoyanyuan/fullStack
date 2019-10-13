@@ -33,6 +33,7 @@ class Spirit{
   draw(gd){
     gd.save();
 
+    //console.log(this.x, this.y)
     gd.translate(this.x, this.y);
     gd.rotate(this.rotation*Math.PI/180);
 

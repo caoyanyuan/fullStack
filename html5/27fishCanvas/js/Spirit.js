@@ -14,6 +14,13 @@ class Spirit{
         this.rotation=options.rotation||0;
         this.scale=options.scale||1;
 
+        this.speed = options.speed || 0
+
+        // 跳入下一帧的次数限制
+        this.tick = 0
+        this.max_tick = 0
+        //帧  
+        this.frame = 0
     }
 
     draw(gd){
@@ -31,5 +38,31 @@ class Spirit{
         );
     
         gd.restore();
-      }
+    }
+
+    //改变sy的值
+    nextFrame() {
+        this.tick++;
+
+        if(this.tick==this.max_tick){
+          this.tick=0;
+    
+          this.frame++;
+    
+          if(this.frame==this.max_fame){
+            this.frame=0;
+          }
+    
+          this.sy=this.frame*this.h;
+        }
+    }
+
+    //游动
+    move() {
+        let speedX = this.speed * Math.sin(this.rotation * Math.PI/180)
+        let speedY = this.speed * Math.cos(this.rotation * Math.PI/180)
+
+        this.x += speedX
+        this.y -= speedY
+    }
 }

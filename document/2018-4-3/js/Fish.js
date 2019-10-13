@@ -1,3 +1,4 @@
+
 class Fish extends Spirit{
   constructor(type){
     if(type>5 || type<1){
@@ -17,6 +18,7 @@ class Fish extends Spirit{
     
     this.max_tick=5;
     this.max_fame=4;
+    
   }
 
   draw(gd){
