@@ -10,17 +10,21 @@
         #canvas {background:url(img/game_bg_2_hd.jpg);}
     </style>
     <script src="js/jquery.js" charset="utf-8"></script>
+    <script src="js/common.js" charset="utf-8"></script>
     <script src="js/resource.js" charset="utf-8"></script>
     <script src="js/Spirit.js" charset="utf-8"></script>
     <script src="js/Fish.js" charset="utf-8"></script>
     <script src="js/Cannon.js" charset="utf-8"></script>
     <script src="js/Bullet.js" charset="utf-8"></script>
     <script src="js/Button.js" charset="utf-8"></script>
+    <script src="js/Coin.js" charset="utf-8"></script>
 
     <script>
         window.onload = async function() {
             let oC = $('#canvas')[0]
             let gd = oC.getContext('2d')
+            let W = oC.width
+            let H = oC.height
 
             await loadAllResource()
 
@@ -39,7 +43,24 @@
             console.log(bottom_bar)
 
             //鱼
-            let fishes = new Fish(1)
+            let fishes = []
+            setInterval(() => {
+                if(Math.random() < 0.1) {
+                    let fish = new Fish(rndInt(1, 6))
+
+                    if(Math.random() < 0.5) {
+                        fish.x -= 100
+                        fish.y = rndInt(0, H)
+                        fish.rotation = rnd(70, 110)
+                    }else{
+                        fish.x = W+100
+                        fish.y = rndInt(0, H)
+                        fish.rotation = rnd(-110, -70)
+                        fish.scaleY = -1
+                    }
+                    fishes.push(fish)
+                }
+            }, 50);
 
             //炮台
             let cannon = new Cannon(1)
@@ -97,31 +118,50 @@
             }
 
             oC.onmouseup = function(ev) {
-                btnMinus.checkup(ev.clientX, ev.clientY)
-                btnPlus.checkup(ev.clientX, ev.clientY)
+                btnMinus.checkUp(ev.clientX, ev.clientY)
+                btnPlus.checkUp(ev.clientX, ev.clientY)
             }
-            
+
+            let coines = []
             requestAnimationFrame(next);
             function next(){
                 //1.清除
                 gd.clearRect(0,0,oC.width,oC.height);
 
-                //动画
-                fishes.nextFrame()
-                fishes.move()
+                //2.动画
+                fishes.map(fish => fish.nextFrame())
+                fishes.map(fish => fish.move())
+                bulletes.map(bullet => bullet.move())
+                coines.map(coin => coin.nextFrame())
+
+                bulletes=bulletes.filter(bullet=>!bullet.outOfCanvas(W,H));
+                fishes=fishes.filter(fish=>!fish.outOfCanvas(W,H));
 
                 //3.绘制
+                fishes.map(fish => fish.draw(gd))
+                bulletes.map(bullet => bullet.draw(gd))
+                coines.map(coin => coin.draw(gd))
+                
                 bottom_bar.draw(gd);
-                //fishes.draw(gd)
                 cannon.draw(gd)
-
-                bulletes.map(bullet => {
-                    bullet.draw(gd)
-                    bullet.move()
-                })
-
                 btnMinus.draw(gd)
                 btnPlus.draw(gd)
+
+                // 4.碰撞检测
+                fishes.map((fish, f_index) => {
+                    bulletes.map((bullet, b_index) => {
+                        if(fish.collTest(bullet)) {
+                            fishes.splice(f_index, 1)
+                            bulletes.splice(b_index, 1)
+
+                            let coin = new Coin(2)
+                            coin.x = fish.x
+                            coin.y = fish.y
+
+                            coines.push(coin)
+                        }
+                    })
+                })
 
                 requestAnimationFrame(next);
             }

@@ -12,7 +12,8 @@ class Spirit{
         this.y=options.y||0;
 
         this.rotation=options.rotation||0;
-        this.scale=options.scale||1;
+        this.scaleX=options.scaleX||1;
+        this.scaleY=options.scaleY||1;
 
         this.speed = options.speed || 0
 
@@ -30,6 +31,7 @@ class Spirit{
     
         gd.translate(this.x, this.y);
         gd.rotate(this.rotation*Math.PI/180);
+        gd.scale(this.scaleX, this.scaleY);
     
         gd.drawImage(
           this.img,
@@ -64,5 +66,28 @@ class Spirit{
 
         this.x += speedX
         this.y -= speedY
+    }
+
+    //出屏幕了
+    outOfCanvas(w, h){
+      if(
+        this.x<0-this.w-100 ||
+        this.y<0-this.h-100 ||
+        this.x>w+this.w+100 ||
+        this.y>h+this.h+100
+      ){
+        return true;
+      }else{
+        return false;
+      }
+    }
+
+    collTest(spirit2) {
+      let r1 = Math.min(this.w/2, this.h/2)
+      let r2 = Math.min(spirit2.w/2, spirit2.h/2)
+
+      let dis = Math.sqrt(Math.pow(this.x-spirit2.x, 2) + Math.pow(this.y - spirit2.y, 2))
+
+      return dis <= (r1 + r2)
     }
 }
