@@ -1,0 +1,121 @@
+express     入门简单、做东西极其麻烦
+  回调函数——
+koa         入门麻烦、做东西舒服
+  generator/async
+  koa@1   generator
+  koa@2   generator+async       过渡版
+  koa@3   async
+
+--------------------------------------------------------------------------------
+
+1.中间件
+2.router
+
+--------------------------------------------------------------------------------
+
+http.createServer((req, res)=>{
+  if(res.url==xxx){
+    xxx
+  }else if(){
+    xxx
+  }
+});
+
+---
+
+let server=express();
+
+server.get('/xxx', ()=>{});
+server.post('/xxx', ()=>{});
+server.use('/xxx', ()=>{});     //通用——不限制方法
+
+server.get(()=>{});
+server.post(()=>{});
+server.use(()=>{});
+
+--------------------------------------------------------------------------------
+
+express是非破坏式的框架
+
+res.send
+
+--------------------------------------------------------------------------------
+
+中间件：
+1.插件-补充框架功能
+2.流水线
+  重用
+  分工
+  next
+  顺序
+
+--------------------------------------------------------------------------------
+
+res.send(any);
+res.sendFile(绝对路径文件名);      跟static不一样，更灵活
+res.sendStatus(code);             writeHeader+write+end
+res.redirect('location');
+
+--------------------------------------------------------------------------------
+
+数据交互=GET、POST
+GET=>req.query
+普通POST=>body-parser
+  server.use(body.urlencoded({extended: false}));
+
+  req.body
+文件POST=>multer
+  server.use(multer({dest}).any())
+
+  req.body
+  req.files
+
+--------------------------------------------------------------------------------
+
+cookie——存在浏览器里
+  容量有限——4K
+  不安全——用户、浏览器
+    1.防篡改
+    2.加密
+
+    server.use(cookieParser([secret], {}));
+
+    req.cookies                         接收
+    req.signedCookies                   接收带签名的
+    res.cookie(name, val, options)      发送
+
+--------------------------------------------------------------------------------
+
+session——存在服务器
+  容量不用担心
+  安全——
+
+cookie-session
+
+session劫持
+  sess_id拿走：
+  1.session定期更换ID——有效期
+  2.签名
+
+  server.use(cookieSession({
+    keys or secret
+  }))
+
+  req.session
+
+--------------------------------------------------------------------------------
+
+数据库
+
+路由
+
+渲染引擎
+
+--------------------------------------------------------------------------------
+
+module
+
+
+"s:33.e1bWDds55LQ4bIhLjeZX2+kI3KXnSC+7tQfCjG8Yc0g"
+
+--------------------------------------------------------------------------------
