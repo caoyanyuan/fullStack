@@ -133,6 +133,7 @@
                 fishes.map(fish => fish.move())
                 bulletes.map(bullet => bullet.move())
                 coines.map(coin => coin.nextFrame())
+                coines.map(coin => coin.move())
 
                 bulletes=bulletes.filter(bullet=>!bullet.outOfCanvas(W,H));
                 fishes=fishes.filter(fish=>!fish.outOfCanvas(W,H));
@@ -155,9 +156,21 @@
                             bulletes.splice(b_index, 1)
 
                             let coin = new Coin(2)
-                            coin.x = fish.x
-                            coin.y = fish.y
+                            let x = fish.x
+                            let y = fish.y
+                            coin.x = x
+                            coin.y = y
 
+                            let rotation = ""
+                            //console.log(x)
+                            // if(x > 100) {
+                            //     rotation = Math.atan2(x-100,y-560) * 180/Math.PI
+                            // }else{
+                                
+                            // } 
+                            coin.rotation = Math.atan2(100-x,y-600) * 180/Math.PI
+
+                            console.log(coin.rotation)
                             coines.push(coin)
                         }
                     })

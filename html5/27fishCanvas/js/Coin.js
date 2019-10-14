@@ -16,6 +16,9 @@ class Coin extends Spirit{
   
       this.max_tick=2;
       this.max_fame=10;
+
+      this.speed = 10
     }
+
   }
   

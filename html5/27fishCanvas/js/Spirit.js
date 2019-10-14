@@ -63,7 +63,7 @@ class Spirit{
     move() {
         let speedX = this.speed * Math.sin(this.rotation * Math.PI/180)
         let speedY = this.speed * Math.cos(this.rotation * Math.PI/180)
-
+        
         this.x += speedX
         this.y -= speedY
     }
