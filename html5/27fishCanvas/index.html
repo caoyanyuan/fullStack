@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>捕鱼</title>
+    <style media="screen">
+        body {background:black; text-align:center;}
+        #canvas {background:url(img/game_bg_2_hd.jpg);}
+    </style>
+    <script src="js/jquery.js" charset="utf-8"></script>
+    <script src="js/common.js" charset="utf-8"></script>
+    <script src="js/resource.js" charset="utf-8"></script>
+    <script src="js/Spirit.js" charset="utf-8"></script>
+    <script src="js/Fish.js" charset="utf-8"></script>
+    <script src="js/Cannon.js" charset="utf-8"></script>
+    <script src="js/Bullet.js" charset="utf-8"></script>
+    <script src="js/Button.js" charset="utf-8"></script>
+    <script src="js/Coin.js" charset="utf-8"></script>
+
+    <script>
+        window.onload = async function() {
+            let oC = $('#canvas')[0]
+            let gd = oC.getContext('2d')
+            let W = oC.width
+            let H = oC.height
+
+            await loadAllResource()
+
+            console.log(__g_resouce)
+            //底座
+            let data_bar=__g_resouce['bottom'].bottom_bar
+            let bottom_bar=new Spirit({
+                img:      data_bar.img,
+                w:        data_bar.frame.w,
+                h:        data_bar.frame.h,
+                sx:       data_bar.frame.x,
+                sy:       data_bar.frame.y,
+                x:        400,
+                y:        566
+            });
+            console.log(bottom_bar)
+
+            //鱼
+            let fishes = []
+            setInterval(() => {
+                if(Math.random() < 0.1) {
+                    let fish = new Fish(rndInt(1, 6))
+
+                    if(Math.random() < 0.5) {
+                        fish.x -= 100
+                        fish.y = rndInt(0, H)
+                        fish.rotation = rnd(70, 110)
+                    }else{
+                        fish.x = W+100
+                        fish.y = rndInt(0, H)
+                        fish.rotation = rnd(-110, -70)
+                        fish.scaleY = -1
+                    }
+                    fishes.push(fish)
+                }
+            }, 50);
+
+            //炮台
+            let cannon = new Cannon(1)
+            
+            //炮-跟着鼠标转
+            oC.onmousemove=function (ev){
+                let a = ev.offsetX-cannon.x;
+                let b = ev.offsetY-cannon.y;
+
+                cannon.rotation = Math.atan2(b,a)*180/Math.PI+90;
+            };
+
+            // 开炮
+            let bulletes = []
+            oC.onclick = function (ev) {
+                if(cannon.rotation < 90) {
+                    let bullet = new Bullet(cannon.type)
+
+                    bullet.x = cannon.x;
+                    bullet.y = cannon.y;
+
+                    bullet.rotation = cannon.rotation
+                    bulletes.push(bullet)
+                }
+            }
+
+            // 炮 - 按钮
+            let btnMinus = new Button(__g_resouce['bottom'].cannon_minus, __g_resouce['bottom'].cannon_minus_down)
+            let btnPlus = new Button(__g_resouce['bottom'].cannon_plus, __g_resouce['bottom'].cannon_plus_down)
+
+            btnMinus.x=442-50;
+            btnMinus.y=580;
+
+            btnPlus.x=442+50;
+            btnPlus.y=580;
+
+            oC.onmousedown = function(ev){
+                let minus=false;
+                let plus=false;
+
+                if(btnMinus.checkDown(ev.offsetX, ev.offsetY)){
+                    minus=true;
+                }
+
+                if(btnPlus.checkDown(ev.offsetX, ev.offsetY)){
+                    plus=true;
+                }
+                
+                if(minus && cannon.type > 1) {
+                    cannon.setType(cannon.type - 1)
+                }
+                if(plus && cannon.type < 7){
+                    cannon.setType(cannon.type +1)
+                }
+            }
+
+            oC.onmouseup = function(ev) {
+                btnMinus.checkUp(ev.clientX, ev.clientY)
+                btnPlus.checkUp(ev.clientX, ev.clientY)
+            }
+
+            let coines = []
+            requestAnimationFrame(next);
+            function next(){
+                //1.清除
+                gd.clearRect(0,0,oC.width,oC.height);
+
+                //2.动画
+                fishes.map(fish => fish.nextFrame())
+                fishes.map(fish => fish.move())
+                bulletes.map(bullet => bullet.move())
+                coines.map(coin => coin.nextFrame())
+                coines.map(coin => coin.move())
+
+                bulletes=bulletes.filter(bullet=>!bullet.outOfCanvas(W,H));
+                fishes=fishes.filter(fish=>!fish.outOfCanvas(W,H));
+
+                //3.绘制
+                fishes.map(fish => fish.draw(gd))
+                bulletes.map(bullet => bullet.draw(gd))
+                coines.map(coin => coin.draw(gd))
+                
+                bottom_bar.draw(gd);
+                cannon.draw(gd)
+                btnMinus.draw(gd)
+                btnPlus.draw(gd)
+
+                // 4.碰撞检测
+                fishes.map((fish, f_index) => {
+                    bulletes.map((bullet, b_index) => {
+                        if(fish.collTest(bullet)) {
+                            fishes.splice(f_index, 1)
+                            bulletes.splice(b_index, 1)
+
+                            let coin = new Coin(2)
+                            let x = fish.x
+                            let y = fish.y
+                            coin.x = x
+                            coin.y = y
+
+                            let rotation = ""
+                            //console.log(x)
+                            // if(x > 100) {
+                            //     rotation = Math.atan2(x-100,y-560) * 180/Math.PI
+                            // }else{
+                                
+                            // } 
+                            coin.rotation = Math.atan2(100-x,y-600) * 180/Math.PI
+
+                            console.log(coin.rotation)
+                            coines.push(coin)
+                        }
+                    })
+                })
+
+                requestAnimationFrame(next);
+            }
+
+        }
+    </script>
+</head>
+<body>
+<canvas id="canvas" width="800" height="600"></canvas>    
+
+</body>
+</html>
