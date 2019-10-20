@@ -29,6 +29,10 @@ server.use(convert(body({
     uploadDir: config.uploadDir
 })));
 
+//session
+server.keys=config.secret_key;
+server.use(session({}, server));
+
 //ejs
 ejs(server, {
     root:     pathlib.resolve('template'),
