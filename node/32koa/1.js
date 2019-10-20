@@ -1,6 +1,7 @@
 const fs=require('fs');
 const Mysql=require('mysql-pro');
 
+// 导入知乎数据 
 const db=new Mysql({
   mysql: {
     host: 'localhost',
@@ -105,16 +106,18 @@ arr.forEach(question=>{
   for(let ID in answers){
     let answer=answers[ID];
 
+    
     aAnswers.push(dataJoin(ID, answer.question_ID, answer.author_ID, answer.content, answer.createdTime));
   }
+  
   let answer_sql=`INSERT INTO answer_table VALUES${aAnswers.join(',')}`;
 
   //topic_sql
   await db.startTransaction();
-  await db.executeTransaction(topic_sql);
-  await db.executeTransaction(author_sql);
-  await db.executeTransaction(question_sql);
-  await db.executeTransaction(answer_sql);
+  //await db.executeTransaction(topic_sql);
+  //await db.executeTransaction(author_sql);
+  // await db.executeTransaction(question_sql);
+   await db.executeTransaction(answer_sql);
   await db.stopTransaction();
 
   console.log('完成');
