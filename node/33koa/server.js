@@ -17,6 +17,7 @@ let server = new Koa()
 server.listen(config.port)
 
 error(server)
+loglib(server)
 
 server.use(async (ctx, next)=>{
     ctx.db=db;
