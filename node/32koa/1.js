@@ -97,7 +97,7 @@ arr.forEach(question=>{
   for(let ID in questions){
     let question=questions[ID];
 
-    aQuestions.push(dataJoin(question.ID, question.title, question.question_content, question.topics, question.attention_count, question.view_count, question.bestAnswer.id));
+    aQuestions.push(dataJoin(ID, question.title, question.question_content, question.topics, question.attention_count, question.view_count, question.bestAnswer.id));
   }
   let question_sql=`INSERT INTO question_table VALUES${aQuestions.join(',')}`;
 
@@ -114,10 +114,10 @@ arr.forEach(question=>{
 
   //topic_sql
   await db.startTransaction();
-  //await db.executeTransaction(topic_sql);
-  //await db.executeTransaction(author_sql);
-  // await db.executeTransaction(question_sql);
-   await db.executeTransaction(answer_sql);
+  await db.executeTransaction(topic_sql);
+  await db.executeTransaction(author_sql);
+  await db.executeTransaction(question_sql);
+  await db.executeTransaction(answer_sql);
   await db.stopTransaction();
 
   console.log('完成');

@@ -96,8 +96,12 @@ arr.forEach(question=>{
   for(let ID in questions){
     let question=questions[ID];
 
-    aQuestions.push(dataJoin(question.ID, question.title, question.question_content, question.topics, question.attention_count, question.view_count, question.bestAnswer.id));
+  
+    aQuestions.push(dataJoin(question.question_ID, question.title, question.content, question.topics, question.attention_count, question.view_count, question.bestAnswer.id));
   }
+
+  console.log(aQuestions[0])
+
   let question_sql=`INSERT INTO question_table VALUES${aQuestions.join(',')}`;
 
   //answers
