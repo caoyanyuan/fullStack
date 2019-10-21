@@ -27,10 +27,10 @@ function requestUrl(url, headers) {
             if(res.statusCode>=200 && res.statusCode<300 || res.statusCode==304) {
                 let arr = []
 
-                req.on('data', data => {
+                res.on('data', data => {
                     arr.push(data)
                 })
-                req.on('end', () => {
+                res.on('end', () => {
                     let buffer = Buffer.concat(arr);
 
                     resolve({
@@ -65,19 +65,12 @@ function requestUrl(url, headers) {
 
 async function request(url, reqHeaders) {
     try{
-        let ret = null
         while (1) {
-            console.log('我能执行几次呢？')
-            console.log(await requestUrl(url, reqHeaders))
-           // let { status, body, headers } =
+            let { status, body, headers } = await requestUrl(url, reqHeaders)
 
-
+            console.log(status)
             if(status == 200) {
-                console.log('return值出去')
-                ret = { body, headers }
-                return {
-                    body: '12'
-                }
+                return  { body, headers }
             }else{
                 assert(status==301 || status==302);
                 assert(headers.location);
@@ -93,15 +86,11 @@ async function request(url, reqHeaders) {
 
 (async()=>{
     try{
-        request('https://shouji.tmall.com/').then(data => {
-            console.log(data)
-        })
-        let {body, headers}=await request('https://shouji.tmall.com/');
-        console.log(body, headers)
+        let {body, headers}=await request('https://taobao.com/');
 
-    //   fs.writeFile(pathlib.resolve('temp', 'taobao.html'), body, err=>{
-    //     console.log(err);
-    //   });
+        fs.writeFile(pathlib.resolve('temp', 'taobao.html'), body, err=>{
+            console.log(err);
+        });
     }catch(e){
       console.log('请求失败', e);
     }
