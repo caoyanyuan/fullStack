@@ -1,0 +1,69 @@
+关于getter，我们在gette里面进行了数据是否已经请求过的判断，如果请求过就不请求了，可是如果数据库更新了数据,因为有判断他就不会去取新的数据了,这个应该不对吧？
+
+步骤：
+1、组件内mounted手动dispatch   actions的方法
+2、方法内请求数据，commit给mutations
+3、mutations更改state声明的list数据，直接赋值，非forEach
+4、组件内定义数据state为this.$store.state
+5、视图渲染直接调用state.list 结果也能成功，没有使用computed，这样使用有什么坏处，按道理store变,我这边也跟着变好像没什么不妥... 少调用了computed，然后需要知道state里面定义的数据
+
+
+练习时创建了多个 store ，在main.js 中引入，用不同的 名字 ，发现只有 叫 "store" 的能挂载上去，叫其他名称的stroe都挂不上去
+Vue.use(Vuex) =>  prototype
+
+prototype.$store
+
+--------------------------------------------------------------------------------
+
+老师等下写项目做接口的时候，演示一下restful吧,
+
+RESTful——不是标准、不是库、不是规范，是一种风格
+
+          1.方法          2.地址
+注册      PUT             /user
+登录      POST            /user
+获取      GET             /user/:id
+修改      POST            /user/:id
+
+其他：
+注册      POST            /user?act=reg
+登录      POST            /user?act=login
+获取      GET             /user?id=xxx
+
+--------------------------------------------------------------------------------
+
+modules：
+1.数据分隔
+2.mutation、action可以重名的，同时被触发
+
+--------------------------------------------------------------------------------
+
+引入模块：
+1.打包在一起
+  import xxx from 'xxxx'
+
+  {
+    components: {xxx}
+  }
+
+2.按需加载/懒加载/分开加载
+  {
+    components: {
+      xxx: import 'xxx'
+    }
+  }
+
+--------------------------------------------------------------------------------
+
+渲染——画出来
+
+--------------------------------------------------------------------------------
+
+move(obj, time, type, end)
+
+move(options)
+
+move({
+  obj: xxx,
+  type: xxx
+})
